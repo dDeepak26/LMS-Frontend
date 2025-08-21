@@ -6,11 +6,12 @@ import RegisterPage from "./Pages/RegisterPage";
 import StudentLmsPage from "./Pages/StudentLmsPage";
 import InstructorLmsPage from "./Pages/InstructorLmsPage";
 import NoPage from "./Pages/NoPage";
+import CourseCreateUpdate from "./Pages/CourseCreateUpdate";
 
 const App = () => {
   return (
     <>
-      <Notifications />
+      <Notifications position="top-center" />
       <BrowserRouter>
         <Routes>
           {/* index route */}
@@ -25,6 +26,10 @@ const App = () => {
 
           {/* instructor route */}
           <Route path="/instructor-lms" element={<InstructorLmsPage />} />
+          <Route
+            path="/instructor-lms/course"
+            element={<CourseCreateUpdate />}
+          />
 
           {/* no page */}
           <Route path="*" element={<NoPage />} />

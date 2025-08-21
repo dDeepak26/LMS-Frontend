@@ -5,8 +5,8 @@ import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import { MantineProvider } from "@mantine/core";
 import App from "./App.tsx";
-import store from "./store.ts";
 import { Provider } from "react-redux";
+import { store } from "./store.ts";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
