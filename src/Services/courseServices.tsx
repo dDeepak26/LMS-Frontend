@@ -1,13 +1,23 @@
 import axios from "axios";
 import type { courseType } from "../Types/courseType";
 import { TOKEN } from "../Constants";
+import uploadVideoService from "./uploadVideoService";
 
 const BASE_URL = "http://localhost:8080/courses";
 const token = sessionStorage.getItem(TOKEN);
 
 // create course (Instructor)
 const createCourseService = async (values: courseType) => {
-  console.log("values data for service", values);
+  console.log("values that will be used for api service", values);
+
+  // uploading the videos through upload video service
+  const newLectures = await Promise.all(
+    values.lectures.map(async (lecture) => {
+      const videoUrl = await uploadVideoService(lecture.videoUrl);
+      return { ...lecture, videoUrl };
+    })
+  );
+  console.log("new lecture data", newLectures);
 
   // converting values into form data
   const formData = new FormData();
@@ -20,26 +30,16 @@ const createCourseService = async (values: courseType) => {
   formData.append("price", values.price.toString());
   formData.append("discount", values.discount.toString());
   formData.append("imageUrl", values.imageUrl);
+  formData.append("lectures", JSON.stringify(newLectures));
 
-  // appending the meta data for the lecture with the lecture.video reference buz the file cannot into into object string
-  const lectureMeta = values.lectures.map((lecture, index) => ({
-    order: index + 1,
-    title: lecture.title,
-    lectureDescription: lecture.lectureDescription,
-    preview: lecture.preview,
-    videoUrl: null,
-  }));
-
-  formData.append("lectures", JSON.stringify(lectureMeta));
-
-  // now uploading the video separately with the matched key
-  values.lectures.forEach((lecture) => {
-    formData.append(`videos`, lecture.videoUrl);
-  });
-
-  for (const pair of formData.entries()) {
-    console.log(pair[0], pair[1]);
-  }
+  // printing the form data
+  // for (const pair of formData.entries()) {
+  //   console.log(pair[0], pair[1]);
+  // }
+  console.log(
+    "form data that will be send to api for create course",
+    Object.fromEntries(formData.entries())
+  );
 
   const res = await axios
     .post(`${BASE_URL}/`, formData, {

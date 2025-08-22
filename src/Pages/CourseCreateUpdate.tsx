@@ -87,7 +87,7 @@ const CourseCreateUpdate = () => {
   });
 
   const handleCreateCourse = async (values: courseType) => {
-    open();
+    // open();
 
     // // modifying lectures
     // const lectures = values.lectures;
@@ -132,7 +132,7 @@ const CourseCreateUpdate = () => {
           icon: <IconCheck size={18} />,
           autoClose: 3000,
         });
-        close();
+        // close();
       } else {
         close();
         notifications.show({
