@@ -40,15 +40,15 @@ const CourseCreateUpdate = () => {
       price: null,
       discount: null,
       imageUrl: null,
-      //   lectures: [
-      //     {
-      //       order: null,
-      //       title: "",
-      //       lectureDescription: "",
-      //       preview: false,
-      //       videoUrl: null,
-      //     },
-      //   ],
+      lectures: [
+        {
+          order: null,
+          title: "",
+          lectureDescription: "",
+          preview: false,
+          videoUrl: null,
+        },
+      ],
     },
     validate: {
       name: (value) =>
@@ -119,27 +119,30 @@ const CourseCreateUpdate = () => {
     // calling the create course api
 
     const serRes = await createCourseService(values);
-    if (serRes.msg) {
-      console.log("Course Created", serRes);
-      form.reset();
-      notifications.show({
-        title: `Course Created Successfully`,
-        message: "",
-        color: "green",
-        icon: <IconCheck size={18} />,
-        autoClose: 3000,
-      });
-      close();
-    } else {
-      console.log("err in creating course", serRes.response.data.errMsg);
-      notifications.show({
-        title: `Err ${serRes.errMsg}`,
-        message: "Error in creating course",
-        color: "red",
-        icon: <IconX size={18} />,
-        autoClose: 3000,
-      });
-      close();
+    if (serRes) {
+      console.log("server response: ", serRes);
+
+      if (serRes.msg) {
+        console.log("Course Created", serRes);
+        // form.reset();
+        notifications.show({
+          title: `Course Created Successfully`,
+          message: "",
+          color: "green",
+          icon: <IconCheck size={18} />,
+          autoClose: 3000,
+        });
+        close();
+      } else {
+        close();
+        notifications.show({
+          title: `${serRes.response.statusText}`,
+          message: "Error in creating course",
+          color: "red",
+          icon: <IconX size={18} />,
+          autoClose: 3000,
+        });
+      }
     }
   };
 
@@ -279,7 +282,7 @@ const CourseCreateUpdate = () => {
               {...form.getInputProps("imageUrl")}
             />
             {/* add lectures button */}
-            {/* <div className="flex justify-end">
+            <div className="flex justify-end">
               <Button
                 variant="light"
                 onClick={() =>
@@ -348,7 +351,6 @@ const CourseCreateUpdate = () => {
               </div>
             ))}
 
-            */}
             <Button type="submit" fullWidth>
               Create Course
             </Button>
