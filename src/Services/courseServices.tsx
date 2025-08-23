@@ -8,16 +8,13 @@ const token = sessionStorage.getItem(TOKEN);
 
 // create course (Instructor)
 const createCourseService = async (values: courseType) => {
-  console.log("values that will be used for api service", values);
-
-  // uploading the videos through upload video service
+  // uploading the videos through upload video service and getting the uploaded url and appending it into the newLecture array object
   const newLectures = await Promise.all(
-    values.lectures.map(async (lecture) => {
-      const videoUrl = await uploadVideoService(lecture.videoUrl);
-      return { ...lecture, videoUrl };
+    values.lectures.map(async (lecture, index) => {
+      const videoUrl = await uploadVideoService(lecture.videoUrl, values.name);
+      return { ...lecture, order: index + 1, videoUrl };
     })
   );
-  console.log("new lecture data", newLectures);
 
   // converting values into form data
   const formData = new FormData();
@@ -31,15 +28,6 @@ const createCourseService = async (values: courseType) => {
   formData.append("discount", values.discount.toString());
   formData.append("imageUrl", values.imageUrl);
   formData.append("lectures", JSON.stringify(newLectures));
-
-  // printing the form data
-  // for (const pair of formData.entries()) {
-  //   console.log(pair[0], pair[1]);
-  // }
-  console.log(
-    "form data that will be send to api for create course",
-    Object.fromEntries(formData.entries())
-  );
 
   const res = await axios
     .post(`${BASE_URL}/`, formData, {

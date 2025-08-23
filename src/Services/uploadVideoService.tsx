@@ -1,20 +1,21 @@
 import axios from "axios";
 import { TOKEN } from "../Constants";
+import { toSnakeCaseOnlyLetters } from "../utils/camelCaseText";
 
 const token = sessionStorage.getItem(TOKEN);
 
-const uploadVideoService = async (file: File) => {
-  console.log("file data that is send to uploadVideoService", file);
-
+const uploadVideoService = async (file: File, courseName: string) => {
+  // calling the get video signature api with the course name (snake case) so that inside cloudinary the video will be store in this format LMS/videos/instructorEmail/courseName
   const { data } = await axios.get(
-    "http://localhost:8080/cloudinary/get-video-signature",
+    `http://localhost:8080/cloudinary/get-video-signature/${toSnakeCaseOnlyLetters(
+      courseName
+    )}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }
   );
-  console.log("signature", data);
 
   const formData = new FormData();
   formData.append("file", file);
@@ -38,8 +39,6 @@ const uploadVideoService = async (file: File) => {
       },
     }
   );
-
-  console.log("res of the uploading the video api", res.data);
 
   return res.data.secure_url;
 };

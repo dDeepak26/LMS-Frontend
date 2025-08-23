@@ -87,36 +87,7 @@ const CourseCreateUpdate = () => {
   });
 
   const handleCreateCourse = async (values: courseType) => {
-    // open();
-
-    // // modifying lectures
-    // const lectures = values.lectures;
-    // let modifiedLectures = [];
-
-    // console.log("original lectures", lectures);
-
-    // // iterating over the lectures and modifying the video url
-    // for (let i = 0; i < lectures.length; i++) {
-    //   const base64VideoString = await fileToBase64(lectures[i].videoUrl);
-    //   await modifiedLectures.push({
-    //     ...lectures[i],
-    //     videoUrl: base64VideoString,
-    //     order: i,
-    //   });
-    // }
-
-    // console.log("modified lectures", modifiedLectures);
-
-    // creating new object with updated imageUrl
-    // const newValues = {
-    //   ...values,
-    //   imageUrl: base64ImageString,
-    //   lectures: modifiedLectures,
-    // };
-    // console.log("new values", newValues);
-    // close();
-
-    // calling the create course api
+    open();
 
     const serRes = await createCourseService(values);
     if (serRes) {
@@ -124,7 +95,7 @@ const CourseCreateUpdate = () => {
 
       if (serRes.msg) {
         console.log("Course Created", serRes);
-        // form.reset();
+        form.reset();
         notifications.show({
           title: `Course Created Successfully`,
           message: "",
@@ -132,7 +103,7 @@ const CourseCreateUpdate = () => {
           icon: <IconCheck size={18} />,
           autoClose: 3000,
         });
-        // close();
+        close();
       } else {
         close();
         notifications.show({
@@ -143,6 +114,7 @@ const CourseCreateUpdate = () => {
           autoClose: 3000,
         });
       }
+      close();
     }
   };
 
@@ -281,23 +253,6 @@ const CourseCreateUpdate = () => {
               key={form.key("imageUrl")}
               {...form.getInputProps("imageUrl")}
             />
-            {/* add lectures button */}
-            <div className="flex justify-end">
-              <Button
-                variant="light"
-                onClick={() =>
-                  form.insertListItem("lectures", {
-                    order: null,
-                    title: "",
-                    lectureDescription: "",
-                    preview: false,
-                    videoUrl: null,
-                  })
-                }
-              >
-                Add
-              </Button>
-            </div>
 
             {form.values.lectures.map((_lecture, index) => (
               <div
@@ -342,7 +297,7 @@ const CourseCreateUpdate = () => {
                 />
 
                 <Button
-                  variant="subtle"
+                  variant="light"
                   color="red"
                   onClick={() => form.removeListItem("lectures", index)}
                 >
@@ -351,6 +306,23 @@ const CourseCreateUpdate = () => {
               </div>
             ))}
 
+            {/* add lectures button */}
+            <Button
+              fullWidth
+              variant="light"
+              onClick={() =>
+                form.insertListItem("lectures", {
+                  order: null,
+                  title: "",
+                  lectureDescription: "",
+                  preview: false,
+                  videoUrl: null,
+                })
+              }
+            >
+              Add Lecture
+            </Button>
+            {/* create course button */}
             <Button type="submit" fullWidth>
               Create Course
             </Button>
