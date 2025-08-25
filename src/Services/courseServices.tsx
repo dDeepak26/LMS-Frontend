@@ -42,4 +42,50 @@ const createCourseService = async (values: courseType) => {
   return res;
 };
 
-export { createCourseService };
+// Both student and instructor
+const getAllCoursesService = async () => {
+  const res = await axios
+    .get(`${BASE_URL}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => res.data)
+    .catch((err) => err);
+  return res;
+};
+
+// get instructor created courses
+const getInstructorCourses = async () => {
+  const res = await axios
+    .get(`${BASE_URL}/instructor`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => res.data)
+    .catch((err) => err);
+
+  return res;
+};
+
+// get courses details by courseId
+const getCourseDetail = async (courseId: string) => {
+  const res = await axios
+    .get(`${BASE_URL}/detail/${courseId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => res.data)
+    .catch((err) => err);
+
+  return res;
+};
+
+export {
+  createCourseService,
+  getAllCoursesService,
+  getInstructorCourses,
+  getCourseDetail,
+};

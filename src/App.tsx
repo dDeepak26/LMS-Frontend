@@ -7,6 +7,7 @@ import StudentLmsPage from "./Pages/StudentLmsPage";
 import InstructorLmsPage from "./Pages/InstructorLmsPage";
 import NoPage from "./Pages/NoPage";
 import CourseCreateUpdate from "./Pages/CourseCreateUpdate";
+import CourseDetailPage from "./Pages/CourseDetailPage";
 
 const App = () => {
   return (
@@ -29,6 +30,12 @@ const App = () => {
           <Route
             path="/instructor-lms/course"
             element={<CourseCreateUpdate />}
+          />
+
+          {/* course route */}
+          <Route
+            path="/course-detail/:courseId"
+            element={<CourseDetailPage />}
           />
 
           {/* no page */}

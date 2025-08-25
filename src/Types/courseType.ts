@@ -1,3 +1,12 @@
+export interface instructor {
+  id: string;
+  fullName: string;
+  email: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface lecture {
   order?: number;
   title: string;
@@ -7,6 +16,7 @@ export interface lecture {
 }
 
 export interface courseType {
+  _id: string;
   name: string;
   description: string;
   category: string;
@@ -17,4 +27,7 @@ export interface courseType {
   discount: number;
   imageUrl: any;
   lectures: lecture[];
+  instructor: instructor;
+  createdAt: string;
+  updatedAt: string;
 }
