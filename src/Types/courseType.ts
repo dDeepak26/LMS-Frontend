@@ -31,3 +31,11 @@ export interface courseType {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface enrolledCoursesType {
+  _id: string;
+  user: string;
+  course: courseType;
+  createdAt: string;
+  updatedAt: string;
+}

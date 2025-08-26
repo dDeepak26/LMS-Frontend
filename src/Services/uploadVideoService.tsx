@@ -40,6 +40,9 @@ const uploadVideoService = async (file: File, courseName: string) => {
     }
   );
 
+  console.log("url", res.data.secure_url);
+  console.log("public id", res.data.public_id);
+
   return res.data.secure_url;
 };
 

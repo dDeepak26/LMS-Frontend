@@ -6,6 +6,7 @@ import type { RootState } from "../../store";
 import {
   IconCirclePlus,
   IconLogout2,
+  IconNotebook,
   IconUserCircle,
 } from "@tabler/icons-react";
 import { removeUser } from "../../Slices/userSlice";
@@ -68,6 +69,16 @@ const Header = () => {
                 }
               >
                 Create Course
+              </Menu.Item>
+            )}
+            {user && user?.role === "student" && (
+              <Menu.Item
+                leftSection={<IconNotebook size={14} />}
+                onClick={() =>
+                  navigate("/student-lms/enrolled-courses", { replace: true })
+                }
+              >
+                Enrolled Courses
               </Menu.Item>
             )}
             <Menu.Item leftSection={<IconUserCircle size={14} />}>

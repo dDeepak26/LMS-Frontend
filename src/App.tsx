@@ -8,6 +8,7 @@ import InstructorLmsPage from "./Pages/InstructorLmsPage";
 import NoPage from "./Pages/NoPage";
 import CourseCreateUpdate from "./Pages/CourseCreateUpdate";
 import CourseDetailPage from "./Pages/CourseDetailPage";
+import EnrollCoursesPage from "./Pages/EnrollCoursesPage";
 
 const App = () => {
   return (
@@ -24,6 +25,10 @@ const App = () => {
 
           {/* student route */}
           <Route path="/student-lms" element={<StudentLmsPage />} />
+          <Route
+            path="/student-lms/enrolled-courses"
+            element={<EnrollCoursesPage />}
+          />
 
           {/* instructor route */}
           <Route path="/instructor-lms" element={<InstructorLmsPage />} />

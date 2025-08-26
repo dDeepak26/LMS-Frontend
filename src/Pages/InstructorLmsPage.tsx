@@ -1,31 +1,12 @@
 import Header from "../Components/Header/Header";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../store.ts";
-import React, { useEffect } from "react";
-import { getAllCoursesService } from "../Services/courseServices.tsx";
-import { setAllCourses } from "../Slices/coursesSlice.ts";
+import React from "react";
 import CourseCard from "../Components/Courses/CourseCard.tsx";
 import { SimpleGrid } from "@mantine/core";
-import type { courseType } from "../Types/courseType.ts";
+import { useCourses } from "../Hooks/useCourses.tsx";
 
 const InstructorLmsPage = () => {
-  const dispatch = useDispatch();
-  const allCourses: courseType[] = useSelector(
-    (state: RootState) => state.allCourses
-  );
-
-  const getAllCourses = async () => {
-    try {
-      const coursesData = await getAllCoursesService();
-      dispatch(setAllCourses(coursesData));
-    } catch (err) {
-      console.error("Error in getting the courses data");
-    }
-  };
-
-  useEffect(() => {
-    getAllCourses();
-  }, []);
+  // custom hook that store all course and function to get all courses
+  const { allCourses } = useCourses();
 
   return (
     <div className="pt-16">

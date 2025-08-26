@@ -14,6 +14,7 @@ import {
 import { useForm } from "@mantine/form";
 import {
   IconArrowLeft,
+  IconBrandYoutube,
   IconCheck,
   IconPhotoPlus,
   IconX,
@@ -280,7 +281,7 @@ const CourseCreateUpdate = () => {
                 />
 
                 <Checkbox
-                  label="Make this lecture visible to free users"
+                  label="Make this lecture visible to unEnrolled users"
                   key={form.key(`lectures.${index}.preview`)}
                   {...form.getInputProps(`lectures.${index}.preview`)}
                 />
@@ -291,7 +292,7 @@ const CourseCreateUpdate = () => {
                   placeholder="select video"
                   accept="video/mp4,video/mkv,video/webm"
                   clearable
-                  leftSection={<IconPhotoPlus />}
+                  leftSection={<IconBrandYoutube />}
                   {...form.getInputProps(`lectures.${index}.videoUrl`)}
                   key={form.key(`lectures.${index}.videoUrl`)}
                 />
