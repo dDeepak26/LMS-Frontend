@@ -68,7 +68,7 @@ const getAllCoursesService = async () => {
 };
 
 // get instructor created courses
-const getInstructorCourses = async () => {
+const getInstructorCoursesService = async () => {
   try {
     const res = await axios
       .get(`${BASE_URL}/instructor`, {
@@ -240,14 +240,50 @@ const enrollToCourseService = async (courseId: string) => {
   }
 };
 
+const getEnrollUsersService = async (courseId: string) => {
+  try {
+    const enrollUsersRes = await axios
+      .get(`${BASE_URL}/enrolled-users/${courseId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => res.data);
+
+    return enrollUsersRes;
+  } catch (err) {
+    console.error("Error in getting the enrolled users data", err);
+  }
+};
+
+const updateLectureProgressService = async (courseId: string, values: any) => {
+  try {
+    console.log("service called with data", values);
+
+    const updateLectureProgressRes = await axios
+      .put(`${BASE_URL}/lectureProgress/${courseId}`, values, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => res.data);
+
+    return updateLectureProgressRes;
+  } catch (err) {
+    console.error("error in updating the lecture progress", err);
+  }
+};
+
 export {
   createCourseService,
   getAllCoursesService,
-  getInstructorCourses,
+  getInstructorCoursesService,
   getCourseDetail,
   updateCourseImageService,
   updateCourseDataService,
   updateCourseLectureService,
   getEnrolledCoursesService,
   enrollToCourseService,
+  getEnrollUsersService,
+  updateLectureProgressService,
 };

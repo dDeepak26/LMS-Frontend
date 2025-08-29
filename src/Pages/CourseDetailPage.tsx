@@ -9,7 +9,6 @@ import Header from "../Components/Header/Header";
 import {
   Accordion,
   ActionIcon,
-  Anchor,
   AspectRatio,
   Avatar,
   Badge,
@@ -17,6 +16,7 @@ import {
   Flex,
   Group,
   Image,
+  Stack,
   Text,
   Title,
 } from "@mantine/core";
@@ -25,9 +25,15 @@ import type { userType } from "../Types/UserType";
 import { useDisclosure, useHover } from "@mantine/hooks";
 import { IconPencil } from "@tabler/icons-react";
 import UpdateCourseModal from "../Components/Modal/UpdateCourseModal";
-import { useState } from "react";
-import { enrollToCourseService } from "../Services/courseServices";
+import { useEffect, useState } from "react";
+import {
+  enrollToCourseService,
+  getEnrollUsersService,
+} from "../Services/courseServices";
 import { useEnrolledCourses } from "../Hooks/useEnrolledCourses";
+import type { enrolledUserCourseType } from "../Types/enrolledUserCourseType";
+import { toSnakeCaseOnlyLetters } from "../utils/camelCaseText";
+import { Link } from "react-router-dom";
 
 const CourseDetailPage = () => {
   const [updateModalOpened, { open, close }] = useDisclosure(false);
@@ -35,6 +41,11 @@ const CourseDetailPage = () => {
   const [modelState, setModelState] = useState<string>("");
   // state to store the lecture order to update it
   const [updateLecture, setUpdateLecture] = useState<lecture>();
+  // enrolled student data list for the current course
+  const [enrolledStudents, setEnrolledStudents] = useState<
+    enrolledUserCourseType[]
+  >([]);
+  enrolledStudents && console.log(enrolledStudents);
 
   // getting current course data state
   const course: courseType = useSelector(
@@ -55,12 +66,27 @@ const CourseDetailPage = () => {
       (data) => data.course._id === course._id
     );
   }
-  console.log("is enrolled", isCurrentCourseEnroll);
   // get enrolled function form custom hook
   const { getEnrolledCourses } = useEnrolledCourses();
 
   // hover from mantine
   const { hovered, ref } = useHover();
+
+  // getting the enrolled student data
+  const getEnrolledStudent = async () => {
+    try {
+      // getting data from api
+      const enrollStudentData = await getEnrollUsersService(course._id);
+      // storing data in state
+      setEnrolledStudents(enrollStudentData);
+    } catch (err) {
+      console.error("error in getting the enrolled student data");
+    }
+  };
+
+  useEffect(() => {
+    getEnrolledStudent();
+  }, [course]);
 
   return (
     <>
@@ -155,14 +181,15 @@ const CourseDetailPage = () => {
                   </Accordion.Control>
                   <Accordion.Panel>
                     <Text>{lecture.lectureDescription}</Text>
-                    {lecture.preview && (
-                      <Anchor
-                        href={lecture.videoUrl}
-                        target="_blank"
-                        color="blue"
+                    {(lecture.preview || isCurrentCourseEnroll) && (
+                      <Link
+                        to={`/${toSnakeCaseOnlyLetters(
+                          course.name
+                        )}/${toSnakeCaseOnlyLetters(lecture.title)}`}
+                        className="text-blue-600"
                       >
-                        Preview
-                      </Anchor>
+                        {isCurrentCourseEnroll ? "View Lecture" : "Preview"}
+                      </Link>
                     )}
                   </Accordion.Panel>
                 </Accordion.Item>
@@ -247,6 +274,27 @@ const CourseDetailPage = () => {
               </Flex>
               {/* other details of instructor */}
             </Group>
+            {/* enrolled student list */}
+            {user &&
+              user.role === "instructor" &&
+              enrolledStudents &&
+              enrolledStudents.length > 0 && (
+                <div className="mt-2 max-h-screen overflow-y-auto border-t pt-1">
+                  <Title order={4}>Enrolled Students</Title>
+                  <Stack p={"xs"} align="stretch" justify="center" gap="md">
+                    {enrolledStudents &&
+                      enrolledStudents.map((student, index) => (
+                        <Group key={index}>
+                          <Avatar src="" alt="Instructor image" />
+                          <Flex direction={"column"}>
+                            <Text>{student.user.fullName}</Text>
+                            <Text>{student.user.email}</Text>
+                          </Flex>
+                        </Group>
+                      ))}
+                  </Stack>
+                </div>
+              )}
           </div>
         </Flex>
       </main>

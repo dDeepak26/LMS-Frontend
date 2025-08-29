@@ -12,7 +12,7 @@ export const useEnrolledCourses = () => {
   const getEnrolledCourses = async () => {
     try {
       const enrolledCoursesData = await getEnrolledCoursesService();
-      if (enrolledCoursesData.length !== 0) {
+      if (enrolledCoursesData && enrolledCoursesData.length !== 0) {
         dispatch(setEnrolledCourses(enrolledCoursesData));
       }
     } catch (err) {

@@ -9,6 +9,7 @@ import NoPage from "./Pages/NoPage";
 import CourseCreateUpdate from "./Pages/CourseCreateUpdate";
 import CourseDetailPage from "./Pages/CourseDetailPage";
 import EnrollCoursesPage from "./Pages/EnrollCoursesPage";
+import LectureVideoPage from "./Pages/LectureVideoPage";
 
 const App = () => {
   return (
@@ -28,6 +29,10 @@ const App = () => {
           <Route
             path="/student-lms/enrolled-courses"
             element={<EnrollCoursesPage />}
+          />
+          <Route
+            path="/:courseName/:lectureTitle"
+            element={<LectureVideoPage />}
           />
 
           {/* instructor route */}
